@@ -1,15 +1,16 @@
 package com.veda.online.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.veda.online.adapter.DbEntityToModel;
 import com.veda.online.entity.BookingEntity;
 import com.veda.online.entity.BookingTypeDetails;
 import com.veda.online.entity.RowEntity;
 import com.veda.online.entity.SeatEntity;
+import com.veda.online.exception.TicketSelectedException;
 import com.veda.online.model.RegDetails;
 import com.veda.online.model.Registration;
 import com.veda.online.model.RowDetails;
+import com.veda.online.model.TicketDetails;
 import com.veda.online.repository.BookingRepo;
 import com.veda.online.repository.BookingRowRepo;
 import com.veda.online.repository.BookingSeatRepo;
@@ -22,7 +23,9 @@ import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Component
@@ -33,6 +36,8 @@ public class RegistrationService {
     private final BookingTypeDetailsRepo bookingTypeDetailsRepo;
     private final BookingRowRepo bookingRowRepo;
     private final BookingSeatRepo bookingSeatRepo;
+
+    private Map<String, TicketDetails> lockedData = new HashMap<>();
 
     @PostConstruct
     public void loadData() throws IOException {
@@ -79,7 +84,7 @@ public class RegistrationService {
         log.info("Finding Data by==>{}", name);
         List<BookingTypeDetails> list = bookingTypeDetailsRepo.findByParentId(
                 bookingRepo.findByBookingType(name).getId());
-        return list.stream().map(DbEntityToModel::convert).collect(Collectors.toList());
+        return list.stream().map(typeData -> DbEntityToModel.convert(typeData, lockedData)).collect(Collectors.toList());
     }
 
     public List<RowDetails> finalAllByTypeId(String id) {
@@ -88,7 +93,41 @@ public class RegistrationService {
         return bookingRowRepo.findByParentId(typeDetails.getId())
                 .stream().map(rowEntity -> {
                     List<SeatEntity> seats = bookingSeatRepo.findByParentId(rowEntity.getId());
-                    return DbEntityToModel.convertToRows(rowEntity, seats);
+                    return DbEntityToModel.convertToRows(rowEntity, seats, lockedData, id);
                 }).collect(Collectors.toList());
+    }
+
+    public String lockTickets(String id, List<TicketDetails> ticketDetails) {
+
+        ticketDetails.forEach(ticketDetails1 -> {
+            synchronized (this) {
+                String key = getKey(id, ticketDetails1);
+                if (null == lockedData.get(key)) {
+                    lockedData.put(key, ticketDetails1);
+                } else {
+                    throw new TicketSelectedException("Select another ticket");
+                }
+            }
+        });
+
+        return "success";
+    }
+
+    public String unLock(String id, List<TicketDetails> ticketDetails) {
+        ticketDetails.forEach(ticketDetails1 -> {
+            lockedData.remove(getKey(id, ticketDetails1));
+        });
+        return "success";
+    }
+
+    private static String getKey(String id, TicketDetails ticketDetails1) {
+        return id + ticketDetails1.getRowId() + ticketDetails1.getSeatNumber();
+    }
+
+    public String bookTicket(String id, List<TicketDetails> ticketDetails) {
+        //Do Payment
+        //if payment success then lock seat in DB and update avaiable count
+        //Remove locked data from cache/hash map
+        return "success";
     }
 }
