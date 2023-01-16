@@ -8,5 +8,4 @@ import lombok.Data;
 public class TicketDetails {
     private String rowId;
     private Integer seatNumber;
-    private Payment payment;
 }

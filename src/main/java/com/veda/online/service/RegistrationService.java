@@ -1,5 +1,6 @@
 package com.veda.online.service;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.veda.online.adapter.DbEntityToModel;
 import com.veda.online.entity.BookingEntity;
@@ -17,6 +18,7 @@ import com.veda.online.repository.BookingSeatRepo;
 import com.veda.online.repository.BookingTypeDetailsRepo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -43,9 +45,12 @@ public class RegistrationService {
     public void loadData() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         File file = new File("C:\\git-hub\\ticket-booking-service\\src\\main\\resources\\registration.json");
-        Registration registration = mapper.readValue(file,
-                Registration.class);
-        saveData(registration);
+        List<Registration> registration = mapper.readValue(file,
+                new TypeReference<List<Registration>>() {
+                });
+        registration.forEach(registration1 -> {
+            saveData(registration1);
+        });
     }
 
     private void saveData(Registration registration) {

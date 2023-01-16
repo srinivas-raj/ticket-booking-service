@@ -1,4 +1,4 @@
-{
+[{
   "type": "FLIGHT",
   "details": [
     {
@@ -133,4 +133,159 @@
       ]
     }
     ]
-}
+},
+  {
+    "type": "BUS",
+    "details": [
+      {
+        "typeId": "B-0012",
+        "totalSeats": "10",
+        "availableSeats": "10",
+        "rows": [
+          {
+            "rowId": "A",
+            "seats": [
+              {
+                "seatNumber": 1,
+                "available": true
+              },
+              {
+                "seatNumber": 2,
+                "available": true
+              }
+            ]
+          },
+          {
+            "rowId": "B",
+            "seats": [
+              {
+                "seatNumber": 1,
+                "available": true
+              },
+              {
+                "seatNumber": 2,
+                "available": true
+              }
+            ]
+          },
+          {
+            "rowId": "C",
+            "seats": [
+              {
+                "seatNumber": 1,
+                "available": true
+              },
+              {
+                "seatNumber": 2,
+                "available": true
+              }
+            ]
+          },
+          {
+            "rowId": "D",
+            "seats": [
+              {
+                "seatNumber": 1,
+                "available": true
+              },
+              {
+                "seatNumber": 2,
+                "available": true
+              }
+            ]
+          },
+          {
+            "rowId": "E",
+            "seats": [
+              {
+                "seatNumber": 1,
+                "available": true
+              },
+              {
+                "seatNumber": 2,
+                "available": true
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "type": "TRAIN",
+    "details": [
+      {
+        "typeId": "T-898",
+        "totalSeats": "10",
+        "availableSeats": "10",
+        "rows": [
+          {
+            "rowId": "A",
+            "seats": [
+              {
+                "seatNumber": 1,
+                "available": true
+              },
+              {
+                "seatNumber": 2,
+                "available": true
+              }
+            ]
+          },
+          {
+            "rowId": "B",
+            "seats": [
+              {
+                "seatNumber": 1,
+                "available": true
+              },
+              {
+                "seatNumber": 2,
+                "available": true
+              }
+            ]
+          },
+          {
+            "rowId": "C",
+            "seats": [
+              {
+                "seatNumber": 1,
+                "available": true
+              },
+              {
+                "seatNumber": 2,
+                "available": true
+              }
+            ]
+          },
+          {
+            "rowId": "D",
+            "seats": [
+              {
+                "seatNumber": 1,
+                "available": true
+              },
+              {
+                "seatNumber": 2,
+                "available": true
+              }
+            ]
+          },
+          {
+            "rowId": "E",
+            "seats": [
+              {
+                "seatNumber": 1,
+                "available": true
+              },
+              {
+                "seatNumber": 2,
+                "available": true
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]
