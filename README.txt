@@ -15,5 +15,4 @@ Note: Currently locking/unlock seats done in Hashmap we can use any caching tech
 PostMan collections:
 https://api.postman.com/collections/1089508-789a77f9-79ae-485e-ae9a-b8360f64339f?access_key=PMAT-01GPTQSA73ZQ22FZ05GW2YMKJW
 
-Swagger Doc:
-http://localhost:8080/swagger-ui/#/
+Swagger--> http://localhost:8080/swagger-ui/#/
