@@ -1,5 +1,6 @@
 package com.veda.online.controller;
 
+import com.veda.online.entity.BookingEntity;
 import com.veda.online.model.BookingType;
 import com.veda.online.model.RegDetails;
 import com.veda.online.model.RowDetails;
@@ -15,11 +16,18 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TicketBookingController {
     private final RegistrationService registrationService;
+
+    @GetMapping("{type}")
+    public BookingEntity availabilityNames(@PathVariable BookingType type){
+        return registrationService.findByName(type.name());
+    }
+
+
     @GetMapping("{type}/availability")
     public List<RegDetails> availability(@PathVariable BookingType type){
         return registrationService.finalAllByType(type.name());
     }
-
+/*
     @GetMapping("seats/{id}/availability")
     public List<RowDetails> availability(@PathVariable String id){
         return registrationService.finalAllByTypeId(id);
@@ -40,5 +48,5 @@ public class TicketBookingController {
     public String book(@PathVariable String id,
                                @RequestBody List<TicketDetails> ticketDetails){
         return registrationService.bookTicket(id,ticketDetails);
-    }
+    }*/
 }

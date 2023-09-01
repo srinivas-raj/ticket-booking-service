@@ -1,13 +1,13 @@
 package com.veda.online.repository;
 
-import com.veda.online.entity.BookingTypeDetails;
 import com.veda.online.entity.RowEntity;
-import com.veda.online.model.RowDetails;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-public interface BookingRowRepo extends JpaRepository<
-        RowEntity, Long> {
+@Component
+public interface BookingRowRepo {
     List<RowEntity> findByParentId(Long id);
+
+    RowEntity save(RowEntity rowEntity);
 }

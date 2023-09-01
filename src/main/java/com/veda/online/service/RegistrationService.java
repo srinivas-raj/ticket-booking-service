@@ -36,8 +36,8 @@ import java.util.stream.Collectors;
 public class RegistrationService {
     private final BookingRepo bookingRepo;
     private final BookingTypeDetailsRepo bookingTypeDetailsRepo;
-    private final BookingRowRepo bookingRowRepo;
-    private final BookingSeatRepo bookingSeatRepo;
+    //private final BookingRowRepo bookingRowRepo;
+  //  private final BookingSeatRepo bookingSeatRepo;
 
     private Map<String, TicketDetails> lockedData = new HashMap<>();
 
@@ -56,17 +56,18 @@ public class RegistrationService {
     private void saveData(Registration registration) {
         BookingEntity bookingEntity = new BookingEntity();
         bookingEntity.setBookingType(registration.getType());
-        BookingEntity newOne = bookingRepo.save(bookingEntity);
-        System.out.println("Saved " + newOne.getId() + " type" + newOne.getBookingType());
+        Integer newOne = bookingRepo.save(bookingEntity);
+        System.out.println("Saved " + bookingEntity.getId() + " type" + registration.getType());
         registration.getDetails().forEach(regDetails -> {
             BookingTypeDetails bookingTypeDetails = new BookingTypeDetails();
             bookingTypeDetails.setTypeId(regDetails.getTypeId());
-            bookingTypeDetails.setParentId(newOne.getId());
+            bookingTypeDetails.setParentId(bookingEntity.getId());
             bookingTypeDetails.setAvailableSeats(regDetails.getAvailableSeats());
             bookingTypeDetails.setTotalSeats(regDetails.getTotalSeats());
-            BookingTypeDetails typeDetails = bookingTypeDetailsRepo.save(bookingTypeDetails);
-            System.out.println("Saved " + typeDetails.getId() + " type" + typeDetails.getTypeId() + " Parent-id=" + typeDetails.getParentId());
-            regDetails.getRows().forEach(rowDetails -> {
+            Integer typeDetails = bookingTypeDetailsRepo.save(bookingTypeDetails);
+            System.out.println("Saved " + bookingTypeDetails.getId() + " type" + regDetails.getTypeId()
+                    + " Parent-id=" + newOne);
+            /*regDetails.getRows().forEach(rowDetails -> {
                 RowEntity rowEntity = new RowEntity();
                 rowEntity.setRowId(rowDetails.getRowId());
                 rowEntity.setParentId(typeDetails.getId());
@@ -80,18 +81,22 @@ public class RegistrationService {
                     seatEntities.add(seatEntity);
                 });
                 bookingSeatRepo.saveAll(seatEntities);
-            });
+            });*/
         });
 
     }
 
-    public List<RegDetails> finalAllByType(String name) {
+    public BookingEntity findByName(String name){
+        return bookingRepo.findByBookingType(name);
+    }
+
+   public List<RegDetails> finalAllByType(String name) {
         log.info("Finding Data by==>{}", name);
         List<BookingTypeDetails> list = bookingTypeDetailsRepo.findByParentId(
                 bookingRepo.findByBookingType(name).getId());
         return list.stream().map(typeData -> DbEntityToModel.convert(typeData, lockedData)).collect(Collectors.toList());
     }
-
+/*
     public List<RowDetails> finalAllByTypeId(String id) {
         log.info("Finding Data by==>{}", id);
         BookingTypeDetails typeDetails = bookingTypeDetailsRepo.findByTypeId(id);
@@ -134,5 +139,5 @@ public class RegistrationService {
         //if payment success then lock seat in DB and update avaiable count
         //Remove locked data from cache/hash map
         return "success";
-    }
+    }*/
 }

@@ -1,11 +1,11 @@
 package com.veda.online.repository;
 
 import com.veda.online.entity.SeatEntity;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-public interface BookingSeatRepo extends JpaRepository<
-        SeatEntity, Long> {
+@Component
+public interface BookingSeatRepo{
     List<SeatEntity> findByParentId(Long id);
 }
